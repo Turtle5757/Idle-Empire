@@ -34,51 +34,115 @@ function eraColor(){
 function addBuildingIcon(name){let d=document.createElement("div"); d.classList.add("building-icon","new"); d.title=name; d.style.background="#ffcc00"; document.getElementById("building-display").appendChild(d); setTimeout(()=>d.classList.remove("new"),500);}
 function addUnitIcon(name){let d=document.createElement("div"); d.classList.add("unit-icon","new"); d.title=name; d.style.background="#00ccff"; document.getElementById("unit-display").appendChild(d); setTimeout(()=>d.classList.remove("new"),500);}
 
-// Button actions
-document.getElementById("gatherFood").addEventListener("click",()=>{res.food+=1*mul.food;updateUI();});
-document.getElementById("gatherWood").addEventListener("click",()=>{res.wood+=1*mul.wood;updateUI();});
-document.getElementById("gatherStone").addEventListener("click",()=>{res.stone+=1*mul.stone;updateUI();});
-document.getElementById("craftTools").addEventListener("click",()=>{if(res.wood>=5 && res.stone>=5){res.wood-=5;res.stone-=5;res.tools+=1; addBuildingIcon("Workshop");} updateUI();});
-document.getElementById("trainSoldier").addEventListener("click",()=>{units.soldiers+=1; addUnitIcon("Soldier"); updateUI();});
-document.getElementById("trainScout").addEventListener("click",()=>{units.scouts+=1; addUnitIcon("Scout"); updateUI();});
-document.getElementById("trainScientist").addEventListener("click",()=>{units.scientists+=1; addUnitIcon("Scientist"); updateUI();});
-document.getElementById("launchStarship").addEventListener("click",()=>{res.starships+=1;res.planets+=1; addUnitIcon("Starship"); updateUI();});
+// Unlock logic
+function updateBuildingVisibility(){
+  // Start only with Hut
+  if(era==="Caveman") document.getElementById("buildHut").classList.remove("hidden");
+  if(res.food>=10) document.getElementById("buildFarm").classList.remove("hidden");
+  if(res.stone>=10) document.getElementById("buildQuarry").classList.remove("hidden");
+  if(res.tools>=10) document.getElementById("buildWorkshop").classList.remove("hidden");
+  if(res.wood>=20) document.getElementById("buildLumberMill").classList.remove("hidden");
+  if(res.knowledge>=15) document.getElementById("buildLibrary").classList.remove("hidden");
+  if(res.food>=50 && res.gold>=20) document.getElementById("buildVillage").classList.remove("hidden");
+  if(era==="Kingdom") {
+    document.getElementById("buildCastle").classList.remove("hidden");
+    document.getElementById("buildMarket").classList.remove("hidden");
+  }
+  if(era==="Empire") {
+    document.getElementById("buildBarracks").classList.remove("hidden");
+    document.getElementById("buildEnergyPlant").classList.remove("hidden");
+  }
+  if(era==="Space Era") document.getElementById("buildSpaceport").classList.remove("hidden");
+}
 
-// Buildings buttons
+function updateResearchVisibility(){
+  if(res.knowledge>=10) document.getElementById("ecoResearch").classList.remove("hidden");
+  if(buildings.library>0) document.getElementById("ecoResearch2").classList.remove("hidden");
+  if(units.soldiers>=5) document.getElementById("milResearch").classList.remove("hidden");
+  if(units.soldiers>=10) document.getElementById("milResearch2").classList.remove("hidden");
+  if(res.knowledge>=50) document.getElementById("sciResearch").classList.remove("hidden");
+  if(buildings.observatory>0) document.getElementById("sciResearch2").classList.remove("hidden");
+  if(era==="Space Era") document.getElementById("spaceResearch").classList.remove("hidden");
+  if(res.tech>=50) document.getElementById("spaceResearch2").classList.remove("hidden");
+}
+
+function updateUnitVisibility(){
+  if(buildings.barracks>0) {
+    document.getElementById("trainSoldier").classList.remove("hidden");
+    document.getElementById("trainScout").classList.remove("hidden");
+  }
+  if(buildings.library>0) document.getElementById("trainScientist").classList.remove("hidden");
+  if(buildings.spaceport>0) document.getElementById("launchStarship").classList.remove("hidden");
+}
+
+// Button actions
+function setupButtons(){
+  document.getElementById("gatherFood").addEventListener("click",()=>{
+    res.food+=1*mul.food; updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
+  });
+  document.getElementById("gatherWood").addEventListener("click",()=>{
+    res.wood+=1*mul.wood; updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
+  });
+  document.getElementById("gatherStone").addEventListener("click",()=>{
+    res.stone+=1*mul.stone; updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
+  });
+  document.getElementById("craftTools").addEventListener("click",()=>{
+    if(res.wood>=5 && res.stone>=5){ res.wood-=5; res.stone-=5; res.tools+=1; addBuildingIcon("Workshop"); }
+    updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
+  });
+  document.getElementById("trainSoldier").addEventListener("click",()=>{
+    units.soldiers+=1; addUnitIcon("Soldier"); updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
+  });
+  document.getElementById("trainScout").addEventListener("click",()=>{
+    units.scouts+=1; addUnitIcon("Scout"); updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
+  });
+  document.getElementById("trainScientist").addEventListener("click",()=>{
+    units.scientists+=1; addUnitIcon("Scientist"); updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
+  });
+  document.getElementById("launchStarship").addEventListener("click",()=>{
+    res.starships+=1; res.planets+=1; addUnitIcon("Starship"); updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
+  });
+}
+
+// Building buttons
 function build(name,costs){
   let canBuild=true; for(let r in costs) if(res[r]<costs[r]) canBuild=false;
-  if(canBuild){for(let r in costs) res[r]-=costs[r]; buildings[name]+=1; addBuildingIcon(name); updateUI();}
+  if(canBuild){ for(let r in costs) res[r]-=costs[r]; buildings[name]+=1; addBuildingIcon(name); }
+  updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
 }
-document.getElementById("buildHut").addEventListener("click",()=>build("hut",{stone:10}));
-document.getElementById("buildFarm").addEventListener("click",()=>build("farm",{wood:20}));
-document.getElementById("buildQuarry").addEventListener("click",()=>build("quarry",{stone:15}));
-document.getElementById("buildWorkshop").addEventListener("click",()=>build("workshop",{tools:10}));
-document.getElementById("buildLumberMill").addEventListener("click",()=>build("lumber",{wood:20}));
-document.getElementById("buildLibrary").addEventListener("click",()=>build("library",{knowledge:15}));
-document.getElementById("buildVillage").addEventListener("click",()=>build("village",{food:50,gold:20}));
-document.getElementById("buildCastle").addEventListener("click",()=>build("castle",{stone:100,gold:50}));
-document.getElementById("buildMarket").addEventListener("click",()=>build("market",{wood:50,gold:30}));
-document.getElementById("buildBarracks").addEventListener("click",()=>build("barracks",{stone:50,gold:20}));
-document.getElementById("buildObservatory").addEventListener("click",()=>build("observatory",{knowledge:50,gold:30}));
-document.getElementById("buildEnergyPlant").addEventListener("click",()=>build("energyPlant",{stone:50,gold:50}));
-document.getElementById("buildSpaceport").addEventListener("click",()=>build("spaceport",{gold:100,energy:50}));
+const buildingButtons=[
+  ["buildHut",{stone:10}],["buildFarm",{wood:20}],["buildQuarry",{stone:15}],
+  ["buildWorkshop",{tools:10}],["buildLumberMill",{wood:20}],["buildLibrary",{knowledge:15}],
+  ["buildVillage",{food:50,gold:20}],["buildCastle",{stone:100,gold:50}],
+  ["buildMarket",{wood:50,gold:30}],["buildBarracks",{stone:50,gold:20}],
+  ["buildObservatory",{knowledge:50,gold:30}],["buildEnergyPlant",{stone:50,gold:50}],
+  ["buildSpaceport",{gold:100,energy:50}]
+];
+buildingButtons.forEach(b=>document.getElementById(b[0]).addEventListener("click",()=>build(b[0].replace("build","").toLowerCase(),b[1])));
 
-// Research tree
-function unlockResearch(node){let btn=document.getElementById(node); if(!btn.classList.contains("unlocked")){btn.classList.add("unlocked"); achievements.push(node.replace("Research","")+" unlocked!"); updateUI();}}
+// Research
+function unlockResearch(node){
+  let btn=document.getElementById(node); if(!btn.classList.contains("unlocked")){btn.classList.add("unlocked"); achievements.push(node.replace("Research","")+" unlocked!"); updateUI();}
+}
 ["ecoResearch","ecoResearch2","milResearch","milResearch2","sciResearch","sciResearch2","spaceResearch","spaceResearch2"].forEach(id=>document.getElementById(id).addEventListener("click",()=>unlockResearch(id)));
 
 // Idle generation & era progression
 setInterval(()=>{
   for(let r in res) res[r]+=0.2*mul[r];
-  updateUI();
-  if(res.food>=200 && era==="Caveman"){ era="Tribe"; achievements.push("Reached Tribe Era!"); updateUI();}
-  if(res.food>=500 && era==="Tribe"){ era="Kingdom"; achievements.push("Reached Kingdom Era!"); updateUI();}
-  if(res.food>=1000 && era==="Kingdom"){ era="Empire"; achievements.push("Reached Empire Era!"); updateUI();}
-  if(res.food>=2000 && era==="Empire"){ era="Space Era"; achievements.push("Reached Space Era!"); updateUI();}
+  updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
+  // Era progression
+  if(res.food>=200 && era==="Caveman"){ era="Tribe"; achievements.push("Reached Tribe Era!"); }
+  if(res.food>=500 && era==="Tribe"){ era="Kingdom"; achievements.push("Reached Kingdom Era!"); }
+  if(res.food>=1000 && era==="Kingdom"){ era="Empire"; achievements.push("Reached Empire Era!"); }
+  if(res.food>=2000 && era==="Empire"){ era="Space Era"; achievements.push("Reached Space Era!"); }
 },1000);
 
 // Prestige
-document.getElementById("prestigeButton").addEventListener("click",()=>{for(let r in res) res[r]=0; for(let u in units) units[u]=0; era="Caveman"; achievements.push("Great Collapse!"); updateUI();});
+document.getElementById("prestigeButton").addEventListener("click",()=>{
+  for(let r in res) res[r]=0; for(let u in units) units[u]=0; for(let b in buildings) buildings[b]=0; era="Caveman"; achievements.push("Great Collapse!");
+  updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
+});
 
-// Initial UI
-updateUI();
+// Initialize
+setupButtons();
+updateUI(); updateBuildingVisibility(); updateResearchVisibility(); updateUnitVisibility();
