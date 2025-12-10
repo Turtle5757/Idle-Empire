@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Idle Empire: From Rock to Galaxy</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="era-banner">Era: Caveman</div>
+<h1>Idle Empire: From Rock to Galaxy</h1>
+
+<div id="resources">
+  <h2>Resources</h2>
+  <div class="resource" id="res-food">Food: <span>0</span><div class="bar"><div class="fill"></div></div></div>
+  <div class="resource" id="res-wood">Wood: <span>0</span><div class="bar"><div class="fill"></div></div></div>
+  <div class="resource" id="res-stone">Stone: <span>0</span><div class="bar"><div class="fill"></div></div></div>
+  <div class="resource" id="res-tools">Tools: <span>0</span><div class="bar"><div class="fill"></div></div></div>
+  <div class="resource" id="res-knowledge">Knowledge: <span>0</span><div class="bar"><div class="fill"></div></div></div>
+  <div class="resource" id="res-gold">Gold: <span>0</span><div class="bar"><div class="fill"></div></div></div>
+  <div class="resource" id="res-energy">Energy: <span>0</span><div class="bar"><div class="fill"></div></div></div>
+  <div class="resource" id="res-tech">Technology: <span>0</span><div class="bar"><div class="fill"></div></div></div>
+  <div class="resource" id="res-planets">Planets: <span>0</span><div class="bar"><div class="fill"></div></div></div>
+  <div class="resource" id="res-starships">Starships: <span>0</span><div class="bar"><div class="fill"></div></div></div>
+</div>
+
+<div id="buildings">
+  <h2>Buildings</h2>
+  <div class="building-buttons">
+    <button id="buildHut">Hut (10 Stone)</button>
+    <button id="buildFarm">Farm (20 Wood)</button>
+    <button id="buildQuarry">Quarry (15 Stone)</button>
+    <button id="buildWorkshop">Workshop (10 Tools)</button>
+    <button id="buildLumberMill">Lumber Mill (20 Wood)</button>
+    <button id="buildLibrary">Library (15 Knowledge)</button>
+    <button id="buildVillage">Village (50 Food + 20 Gold)</button>
+    <button id="buildCastle">Castle (100 Stone + 50 Gold)</button>
+    <button id="buildMarket">Market (50 Wood + 30 Gold)</button>
+    <button id="buildBarracks">Barracks (50 Stone + 20 Gold)</button>
+    <button id="buildObservatory">Observatory (50 Knowledge + 30 Gold)</button>
+    <button id="buildEnergyPlant">Energy Plant (50 Stone + 50 Gold)</button>
+    <button id="buildSpaceport">Spaceport (100 Gold + 50 Energy)</button>
+  </div>
+  <div id="building-display"></div>
+</div>
+
+<div id="actions">
+  <h2>Actions</h2>
+  <div class="action-buttons">
+    <button id="gatherFood">Gather Food</button>
+    <button id="gatherWood">Gather Wood</button>
+    <button id="gatherStone">Gather Stone</button>
+    <button id="craftTools">Craft Tools</button>
+    <button id="trainSoldier">Train Soldier</button>
+    <button id="trainScout">Train Scout</button>
+    <button id="trainScientist">Train Scientist</button>
+    <button id="launchStarship">Launch Starship</button>
+  </div>
+  <div id="unit-display"></div>
+</div>
+
+<div id="research-tree">
+  <h2>Research Tree</h2>
+  <div id="tree">
+    <button class="research-node" id="ecoResearch">Economy I</button>
+    <button class="research-node" id="ecoResearch2">Economy II</button>
+    <button class="research-node" id="milResearch">Military I</button>
+    <button class="research-node" id="milResearch2">Military II</button>
+    <button class="research-node" id="sciResearch">Science I</button>
+    <button class="research-node" id="sciResearch2">Science II</button>
+    <button class="research-node" id="spaceResearch">Space I</button>
+    <button class="research-node" id="spaceResearch2">Space II</button>
+  </div>
+</div>
+
+<div id="achievements">
+  <h2>Achievements</h2>
+  <ul id="achievementList"></ul>
+</div>
+
+<div id="prestige">
+  <h2>Great Collapse</h2>
+  <button id="prestigeButton">Reset for Bonus</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
